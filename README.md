@@ -185,10 +185,10 @@ The notebook runs a least-squares optimization over four candidate strikes (K ±
 
 | Strike | Position | Delta/contract | Gamma/contract | Vega/contract |
 |---|---|---|---|---|
-| \$49,000 | long  | $\sim 0.82$ | $\sim 1.2 \times 10^{-5}$ | $\sim 14$ |
-| \$49,750 | long  | $\sim 0.64$ | $\sim 2.1 \times 10^{-5}$ | $\sim 16$ |
-| \$50,250 | short | $\sim 0.36$ | $\sim 2.1 \times 10^{-5}$ | $\sim 16$ |
-| \$51,000 | short | $\sim 0.18$ | $\sim 1.2 \times 10^{-5}$ | $\sim 14$ |
+| \$49,000 | long  | ~0.82 | ~1.2 × 10⁻⁵ | ~14 |
+| \$49,750 | long  | ~0.64 | ~2.1 × 10⁻⁵ | ~16 |
+| \$50,250 | short | ~0.36 | ~2.1 × 10⁻⁵ | ~16 |
+| \$51,000 | short | ~0.18 | ~1.2 × 10⁻⁵ | ~14 |
 
 Typical residual after the fit is below 5% of each target Greek.
 
@@ -200,12 +200,12 @@ The notebook runs the following stress scenarios over the path-dependent rebalan
 
 | Scenario | Spot Move / Vol Shock | Net P&L (illustrative) | Note |
 |---|---|---|---|
-| Gradual drift up | $+5\%$ over 24h | -\$800 | Within fit envelope |
-| Gradual drift down | $-5\%$ over 24h | +\$900 | Within fit envelope |
-| Gap up overnight | $+10\%$ jump | -\$1,500 | Fit fails for large gaps |
-| Gap down overnight | $-10\%$ jump | +\$1,600 | Fit fails for large gaps |
-| Vol shock | $\sigma$: $80\% \to 100\%$ | -\$300 | Vega-matched, residual small |
-| Vol shock | $\sigma$: $80\% \to 60\%$ | +\$280 | Vega-matched, residual small |
+| Gradual drift up | +5% over 24h | -\$800 | Within fit envelope |
+| Gradual drift down | -5% over 24h | +\$900 | Within fit envelope |
+| Gap up overnight | +10% jump | -\$1,500 | Fit fails for large gaps |
+| Gap down overnight | -10% jump | +\$1,600 | Fit fails for large gaps |
+| Vol shock | σ: 80% → 100% | -\$300 | Vega-matched, residual small |
+| Vol shock | σ: 80% → 60% | +\$280 | Vega-matched, residual small |
 
 Adverse-selection P&L from informed flow at the strike is not modelled here; on real desks it dominates these residuals.
 
@@ -241,12 +241,12 @@ Starting with the theoretical value of $0.4929$:
 
 | Component | Bid Adjustment | Ask Adjustment |
 |---|---|---|
-| Theoretical Value | $0.4929$ | $0.4929$ |
-| Hedging Cost | $-0.010$ | $+0.010$ |
-| Residual Risk | $-0.020$ | $+0.020$ |
-| Operational Cost | $-0.005$ | $+0.005$ |
-| Profit Margin | $-0.012$ | $+0.012$ |
-| **Final Quote** | **$0.4459$** | **$0.5399$** |
+| Theoretical Value | 0.4929 | 0.4929 |
+| Hedging Cost | -0.010 | +0.010 |
+| Residual Risk | -0.020 | +0.020 |
+| Operational Cost | -0.005 | +0.005 |
+| Profit Margin | -0.012 | +0.012 |
+| **Final Quote** | **0.4459** | **0.5399** |
 
 Total spread: 9.4% of mid-price.
 
@@ -278,7 +278,7 @@ A useful benchmark is the bull-case daily P&L; the model below should not be rea
 **Expected daily costs:**
 - Hedging cost: \$15,000
 - Operational cost: \$3,000
-- Risk capital cost (10% on \$5\text{M}, daily): \$1,370
+- Risk capital cost (10% on \$5M, daily): \$1,370
 
 **Expected daily profit:** \$20,000 - \$19,370 = \$630 (bull case)
 
