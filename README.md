@@ -1,6 +1,6 @@
 # Binary Options Hedging
 
-Three families of hedging strategies for short-dated binary options, with Monte-Carlo P&L simulations, optimal-$\varepsilon$ analysis for bull-spread replication, multi-Greek (delta-gamma-vega) portfolio matching, pin-risk stress, and a market-maker daily-P&L sensitivity model. Built directly on top of the closed-form pricing functions developed in the companion repository.
+Three families of hedging strategies for short-dated binary options, with Monte-Carlo P&L simulations, optimal-ε analysis for bull-spread replication, multi-Greek (delta-gamma-vega) portfolio matching, pin-risk stress, and a market-maker daily-P&L sensitivity model. Built directly on top of the closed-form pricing functions developed in the companion repository.
 
 This is the second half of a two-part series. The pricing repository [`binary-options-pricing`](https://github.com/rolandgem/binary-options-pricing) develops the Black-Scholes binary call price, the Greeks (delta, gamma, vega), and a fuzzy-spot extension. **Read it first.** The hedging code below assumes you understand the pricing formulas, the worked example ($S = K$ = \$50,000, $\sigma = 80\%$, $r = 5\%$, $T = 1/365$), and the Greeks at the strike (binary delta = $1.90 \times 10^{-4}$, binary gamma = $-2.20 \times 10^{-9}$, binary vega = $-1.21 \times 10^{-2}$).
 
