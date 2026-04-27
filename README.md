@@ -2,7 +2,7 @@
 
 Three families of hedging strategies for short-dated binary options, with Monte-Carlo P&L simulations, optimal-$\varepsilon$ analysis for bull-spread replication, multi-Greek (delta-gamma-vega) portfolio matching, pin-risk stress, and a market-maker daily-P&L sensitivity model. Built directly on top of the closed-form pricing functions developed in the companion repository.
 
-This is the second half of a two-part series. The pricing repository [`binary-options-pricing`](https://github.com/rolandgem/binary-options-pricing) develops the Black-Scholes binary call price, the Greeks (delta, gamma, vega), and a fuzzy-spot extension. **Read it first.** The hedging code below assumes you understand the pricing formulas, the worked example ($S = K = \$50{,}000$, $\sigma = 80\%$, $r = 5\%$, $T = 1/365$), and the Greeks at the strike (binary delta = $1.90 \times 10^{-4}$, binary gamma = $-2.20 \times 10^{-9}$, binary vega = $-1.21 \times 10^{-2}$).
+This is the second half of a two-part series. The pricing repository [`binary-options-pricing`](https://github.com/rolandgem/binary-options-pricing) develops the Black-Scholes binary call price, the Greeks (delta, gamma, vega), and a fuzzy-spot extension. **Read it first.** The hedging code below assumes you understand the pricing formulas, the worked example (S = K = \$50,000, $\sigma = 80\%$, $r = 5\%$, $T = 1/365$), and the Greeks at the strike (binary delta = $1.90 \times 10^{-4}$, binary gamma = $-2.20 \times 10^{-9}$, binary vega = $-1.21 \times 10^{-2}$).
 
 ## Companion Notebook
 
@@ -38,23 +38,23 @@ $$ H_t = -\Delta_{\text{binary}} \times \text{Position} $$
 
 #### 4.1.2 Practical Implementation
 
-Consider selling 10,000 binary calls at the theoretical mid $\$0.4929$ each (premium received: $\$4{,}929$).
+Consider selling 10,000 binary calls at the theoretical mid \$0.4929 each (premium received: \$4,929).
 
 **Initial setup ($t = 0$):**
 
-- Spot price: $\$50{,}000$
+- Spot price: \$50,000
 - Binary delta per contract: $1.905 \times 10^{-4}$
 - Total position delta (short binary): $-10{,}000 \times 1.905 \times 10^{-4} = -1.905$
 - Required spot hedge to neutralise: buy $1.905$ BTC
-- Capital deployed: $1.905 \times \$50{,}000 = \$95{,}244$
+- Capital deployed: 1.905 × \$50,000 = \$95,244
 
-The $\$95{,}244$ is deployed capital, not a cost. We own 1.905 BTC of spot inventory which itself moves with the market.
+The \$95,244 is deployed capital, not a cost. We own 1.905 BTC of spot inventory which itself moves with the market.
 
 #### 4.1.3 Rebalancing Dynamics
 
 As spot moves, binary delta changes sharply near the strike. The direction of rebalancing is non-obvious because the binary delta peaks at the strike rather than monotonically increasing in spot.
 
-**Scenario: spot moves to $\$50{,}500$ after 6 hours:**
+**Scenario: spot moves to \$50,500 after 6 hours:**
 
 - Time remaining: 18 hours $= 0.75/365$ years
 - New $d_2 = +0.2591$ (positive: $S$ above strike, time decay sharpens the peak)
@@ -62,7 +62,7 @@ As spot moves, binary delta changes sharply near the strike. The direction of re
 - New total delta: $-2.106$ for the short position
 - Current hedge: $+1.905$ BTC
 - Required adjustment: **buy** an additional $0.201$ BTC (the delta has *increased*, not decreased; the time-decay-driven sharpening of the peak dominates the small drift away from the strike)
-- Transaction cost (10 bps fee + slippage, two-sided): $0.201 \times \$50{,}500 \times 0.001 \approx \$10.17$
+- Transaction cost (10 bps fee + slippage, two-sided): 0.201 × \$50,500 × 0.001 ≈ \$10.17
 
 This is a recurring lesson with binary options: rebalancing intuition built on vanilla options can be backwards. Vanilla delta is monotone in $S$; binary delta is not.
 
@@ -72,13 +72,13 @@ The simplest P&L benchmark is the static delta hedge: 1.905 BTC bought at $t = 0
 
 | $S_T$ | Binary Payout | Binary P&L | Hedge P&L | Net P&L |
 |---:|---:|---:|---:|---:|
-| $\$45{,}000$ | $\$0$       | $+\$4{,}929$  | $-\$9{,}524$ | $-\$4{,}596$ |
-| $\$48{,}000$ | $\$0$       | $+\$4{,}929$  | $-\$3{,}810$ | $+\$1{,}119$ |
-| $\$49{,}500$ | $\$0$       | $+\$4{,}929$  | $-\$952$     | $+\$3{,}976$ |
-| $\$50{,}000$ | boundary    | $\pm\$5{,}071$| $0$          | $\pm\$5{,}071$ |
-| $\$50{,}500$ | $\$10{,}000$ | $-\$5{,}071$  | $+\$952$     | $-\$4{,}119$ |
-| $\$52{,}000$ | $\$10{,}000$ | $-\$5{,}071$  | $+\$3{,}810$ | $-\$1{,}261$ |
-| $\$55{,}000$ | $\$10{,}000$ | $-\$5{,}071$  | $+\$9{,}524$ | $+\$4{,}453$ |
+| \$45,000 | \$0       | +\$4,929  | -\$9,524 | -\$4,596 |
+| \$48,000 | \$0       | +\$4,929  | -\$3,810 | +\$1,119 |
+| \$49,500 | \$0       | +\$4,929  | -\$952     | +\$3,976 |
+| \$50,000 | boundary    | ±\$5,071| $0$          | ±\$5,071 |
+| \$50,500 | \$10,000 | -\$5,071  | +\$952     | -\$4,119 |
+| \$52,000 | \$10,000 | -\$5,071  | +\$3,810 | -\$1,261 |
+| \$55,000 | \$10,000 | -\$5,071  | +\$9,524 | +\$4,453 |
 
 The hedge is approximately right only for moves close to the initial spot; large moves leave large residuals because the static hedge size is sized to $t = 0$ delta, not the path-integrated delta.
 
@@ -87,7 +87,7 @@ The companion notebook simulates the path-dependent P&L distribution under reali
 Key observations:
 
 - Static hedging is most effective for moderate moves and over-hedges for tail moves on either side
-- Transaction costs of $\$10$-$\$50$ per rebalance accumulate to $\$50$-$\$500$ over a 24-hour horizon depending on rebalancing intensity, which is small relative to the residual variance from pin risk
+- Transaction costs of \$10-\$50 per rebalance accumulate to \$50-\$500 over a 24-hour horizon depending on rebalancing intensity, which is small relative to the residual variance from pin risk
 - The best case for delta hedging is large gradual moves; the worst case is terminal pinning near the strike
 - Delta-band rebalancing dominates time-based rebalancing at matched rebalance counts, because it concentrates rebalances near the strike where they are most valuable
 
@@ -109,34 +109,34 @@ The choice of $\varepsilon$ trades off three considerations:
 - **Market liquidity:** standard listed strikes often sit on $0.5\%$-$1\%$-of-spot grids, so very small $\varepsilon$ is unavailable
 - **Pin risk:** larger $\varepsilon$ leaves a wider transition region where the hedge is imperfect, but the gamma is more diffuse
 
-A reasonable practitioner default is $\varepsilon$ on the order of $\sigma S \sqrt{T}$ (one daily standard deviation), or one strike grid width, whichever is larger. We use $\varepsilon = \$500$ for the running example, which corresponds to roughly $0.24$ daily standard deviations and matches a typical exchange strike grid for BTC.
+A reasonable practitioner default is $\varepsilon$ on the order of $\sigma S \sqrt{T}$ (one daily standard deviation), or one strike grid width, whichever is larger. We use ε = \$500 for the running example, which corresponds to roughly $0.24$ daily standard deviations and matches a typical exchange strike grid for BTC.
 
 #### 4.2.3 Implementation with Market Frictions
 
 Using Black-Scholes mids at $\sigma = 80\%$, $T = 1/365$ for BTC vanilla calls:
 
-- Call($K - \varepsilon = \$49{,}500$) mid: $\$1{,}108.83$
-- Call($K + \varepsilon = \$50{,}500$) mid: $\$615.72$
-- Bull spread mid: $\$493.11$
-- Maximum payout per spread: $\$1{,}000$
+- Call(K - ε = \$49,500) mid: \$1,108.83
+- Call(K + ε = \$50,500) mid: \$615.72
+- Bull spread mid: \$493.11
+- Maximum payout per spread: \$1,000
 
-To hedge 10,000 binary options (each with $\$1$ maximum payout):
+To hedge 10,000 binary options (each with \$1 maximum payout):
 
-- Need $10{,}000 / (2\varepsilon) = 10$ bull spreads, each long Call($\$49{,}500$) and short Call($\$50{,}500$)
-- Cost mid-mid: $10 \times \$493.11 = \$4{,}931$
-- Cost with 2% bid-ask paid on each leg: $\approx \$5{,}030$
-- Net position after receiving binary premium of $\$4{,}929$: approximately $\$100$ hedging cost (notably tighter than delta hedging because the bull spread captures gamma)
+- Need $10{,}000 / (2\varepsilon) = 10$ bull spreads, each long Call(\$49,500) and short Call(\$50,500)
+- Cost mid-mid: 10 × \$493.11 = \$4,931
+- Cost with 2% bid-ask paid on each leg: ≈ \$5,030
+- Net position after receiving binary premium of \$4,929: approximately \$100 hedging cost (notably tighter than delta hedging because the bull spread captures gamma)
 
 #### 4.2.4 Payoff Analysis
 
 | Spot Range | Binary P&L | Spread P&L | Net P&L | Risk |
 |---|---|---|---|---|
-| Below $\$49{,}500$ | $+\$4{,}929$ | $-\$4{,}931$ | $\approx \$0$ | Perfectly hedged |
-| $\$49{,}500$ to $\$50{,}000$ | $+\$4{,}929$ | $-\$4{,}931 + 10(S_T - 49{,}500)$ | up to $+\$4{,}929$ | Under-hedged |
-| $\$50{,}000$ to $\$50{,}500$ | $-\$5{,}071$ | $-\$4{,}931 + 10(S_T - 49{,}500)$ | up to $-\$5{,}071$ | Under-hedged |
-| Above $\$50{,}500$ | $-\$5{,}071$ | $+\$5{,}069$ | $\approx \$0$ | Perfectly hedged |
+| Below \$49,500 | +\$4,929 | -\$4,931 | ≈ \$0 | Perfectly hedged |
+| \$49,500 to \$50,000 | +\$4,929 | -\$4,931 + 10(S_T - 49,500) | up to +\$4,929 | Under-hedged |
+| \$50,000 to \$50,500 | -\$5,071 | -\$4,931 + 10(S_T - 49,500) | up to -\$5,071 | Under-hedged |
+| Above \$50,500 | -\$5,071 | +\$5,069 | ≈ \$0 | Perfectly hedged |
 
-The hedge is exact outside $[K-\varepsilon, K+\varepsilon]$ and worst inside. The companion notebook plots P&L variance as a function of $\varepsilon$ across $[\$100, \$2{,}000]$, recovering a U-shape: small $\varepsilon$ has tight inside-region exposure but pays heavy bid-ask, large $\varepsilon$ has cheap execution but wider transition region. The minimum-cost $\varepsilon$ for the running parameters sits near $\$500$.
+The hedge is exact outside $[K-\varepsilon, K+\varepsilon]$ and worst inside. The companion notebook plots P&L variance as a function of $\varepsilon$ across [\$100, \$2,000], recovering a U-shape: small $\varepsilon$ has tight inside-region exposure but pays heavy bid-ask, large $\varepsilon$ has cheap execution but wider transition region. The minimum-cost $\varepsilon$ for the running parameters sits near \$500.
 
 ### 4.3 Dynamic Portfolio Hedging
 
@@ -153,7 +153,7 @@ where:
 
 #### 4.3.2 Target Greeks
 
-For 10,000 binary calls at $S = K = \$50{,}000$, $\sigma = 80\%$, $T = 1/365$:
+For 10,000 binary calls at S = K = \$50,000, $\sigma = 80\%$, $T = 1/365$:
 
 - Delta target: $-1.905$ (short binary, must offset by long delta)
 - Gamma target: $+2.20 \times 10^{-5}$ (binary gamma is negative at strike, position gamma flips sign for the short)
@@ -161,18 +161,18 @@ For 10,000 binary calls at $S = K = \$50{,}000$, $\sigma = 80\%$, $T = 1/365$:
 
 #### 4.3.3 Optimization Results
 
-The notebook runs a least-squares optimization over four candidate strikes ($K \pm \$1{,}000$, $K \pm \$250$). Representative output (exact values reproduced in the companion notebook):
+The notebook runs a least-squares optimization over four candidate strikes (K ± \$1,000, K ± \$250). Representative output (exact values reproduced in the companion notebook):
 
 | Strike | Position | Delta/contract | Gamma/contract | Vega/contract |
 |---|---|---|---|---|
-| $\$49{,}000$ | long  | $\sim 0.82$ | $\sim 1.2 \times 10^{-5}$ | $\sim 14$ |
-| $\$49{,}750$ | long  | $\sim 0.64$ | $\sim 2.1 \times 10^{-5}$ | $\sim 16$ |
-| $\$50{,}250$ | short | $\sim 0.36$ | $\sim 2.1 \times 10^{-5}$ | $\sim 16$ |
-| $\$51{,}000$ | short | $\sim 0.18$ | $\sim 1.2 \times 10^{-5}$ | $\sim 14$ |
+| \$49,000 | long  | $\sim 0.82$ | $\sim 1.2 \times 10^{-5}$ | $\sim 14$ |
+| \$49,750 | long  | $\sim 0.64$ | $\sim 2.1 \times 10^{-5}$ | $\sim 16$ |
+| \$50,250 | short | $\sim 0.36$ | $\sim 2.1 \times 10^{-5}$ | $\sim 16$ |
+| \$51,000 | short | $\sim 0.18$ | $\sim 1.2 \times 10^{-5}$ | $\sim 14$ |
 
 Typical residual after the fit is below 5% of each target Greek.
 
-The capital required for the hedge is the net debit on the four-leg portfolio plus the 2% bid-ask paid on each leg; for a 10,000-contract binary book, this is on the order of $\$2{,}000$ in spread paid (not the $\sim \$20{,}000$ gross debit, which is mostly recoverable when the position unwinds). The trade-off versus pure delta hedging is significantly tighter Greek match, at the cost of a more complex book to manage and four times the rebalancing surface area.
+The capital required for the hedge is the net debit on the four-leg portfolio plus the 2% bid-ask paid on each leg; for a 10,000-contract binary book, this is on the order of \$2,000 in spread paid (not the ~\$20,000 gross debit, which is mostly recoverable when the position unwinds). The trade-off versus pure delta hedging is significantly tighter Greek match, at the cost of a more complex book to manage and four times the rebalancing surface area.
 
 #### 4.3.4 Stress Test Analysis
 
@@ -180,12 +180,12 @@ The notebook runs the following stress scenarios over the path-dependent rebalan
 
 | Scenario | Spot Move / Vol Shock | Net P&L (illustrative) | Note |
 |---|---|---|---|
-| Gradual drift up | $+5\%$ over 24h | $-\$800$ | Within fit envelope |
-| Gradual drift down | $-5\%$ over 24h | $+\$900$ | Within fit envelope |
-| Gap up overnight | $+10\%$ jump | $-\$1{,}500$ | Fit fails for large gaps |
-| Gap down overnight | $-10\%$ jump | $+\$1{,}600$ | Fit fails for large gaps |
-| Vol shock | $\sigma$: $80\% \to 100\%$ | $-\$300$ | Vega-matched, residual small |
-| Vol shock | $\sigma$: $80\% \to 60\%$ | $+\$280$ | Vega-matched, residual small |
+| Gradual drift up | $+5\%$ over 24h | -\$800 | Within fit envelope |
+| Gradual drift down | $-5\%$ over 24h | +\$900 | Within fit envelope |
+| Gap up overnight | $+10\%$ jump | -\$1,500 | Fit fails for large gaps |
+| Gap down overnight | $-10\%$ jump | +\$1,600 | Fit fails for large gaps |
+| Vol shock | $\sigma$: $80\% \to 100\%$ | -\$300 | Vega-matched, residual small |
+| Vol shock | $\sigma$: $80\% \to 60\%$ | +\$280 | Vega-matched, residual small |
 
 Adverse-selection P&L from informed flow at the strike is not modelled here; on real desks it dominates these residuals.
 
@@ -248,21 +248,21 @@ Example with $-50{,}000$ net position and $100{,}000$ max position:
 
 A useful benchmark is the bull-case daily P&L; the model below should not be read as a forecast. We assume:
 
-- Daily volume: $\$1{,}000{,}000$ notional
+- Daily volume: \$1,000,000 notional
 - Spread capture: $2.0\%$ (mid-half of 9.4% quoted spread, after adverse-selection drag from informed flow concentrating at the strike)
 - Hedging cost: $1.5\%$ of notional (transaction fees, slippage, residual gamma P&L)
 - Operational cost: $0.3\%$ of notional (tech, infrastructure, exchange fees)
 
-**Expected daily revenue:** $\$1{,}000{,}000 \times 0.020 = \$20{,}000$
+**Expected daily revenue:** \$1,000,000 × 0.020 = \$20,000
 
 **Expected daily costs:**
-- Hedging cost: $\$15{,}000$
-- Operational cost: $\$3{,}000$
-- Risk capital cost (10% on $\$5\text{M}$, daily): $\$1{,}370$
+- Hedging cost: \$15,000
+- Operational cost: \$3,000
+- Risk capital cost (10% on \$5\text{M}, daily): \$1,370
 
-**Expected daily profit:** $\$20{,}000 - \$19{,}370 = \$630$ (bull case)
+**Expected daily profit:** \$20,000 - \$19,370 = \$630 (bull case)
 
-**Annual return on capital** (365 trading days, since crypto markets are continuous): $\$630 \times 365 / \$5{,}000{,}000 = 4.6\%$ (bull case)
+**Annual return on capital** (365 trading days, since crypto markets are continuous): \$630 × 365 / \$5,000,000 = 4.6% (bull case)
 
 These numbers are deliberately bear-leaning. An earlier draft of this analysis computed a 153% annual ROC by combining a 4.7% spread capture, a 48% assumed win rate against informed flow, and a 250-day calendar; each of those inputs is too generous in isolation, and the product compounds the optimism. A more credible top-of-cycle band, with 2%-3% spread capture, slightly informed flow priced in, and the full 365-day crypto calendar, lands in the 5%-25% ROC range. The companion notebook plots a heatmap of annualised ROC across (spread capture, adverse selection drag) so readers can see the sensitivity directly.
 
@@ -274,10 +274,10 @@ These numbers are deliberately bear-leaning. An earlier draft of this analysis c
 
 | Strategy | Hedging Cost | Complexity | P&L Variance Reduction | Best Use Case |
 |---|---|---|---|---|
-| No Hedge | $\$0$ | None | $0\%$ | Sub-strike-tick positions |
-| Delta Spot | $\sim \$50$-$\$500$ | Low | $50\%$-$60\%$ | Liquid spot, frequent rebalance |
-| Vanilla Bull Spread | $\sim \$100$ residual | Medium | $70\%$-$80\%$ | Standard listed strikes available |
-| Multi-Greek Portfolio | $\sim \$1{,}000$-$\$2{,}000$ | High | $85\%$-$92\%$ | Large books, vol-sensitive period |
+| No Hedge | \$0 | None | $0\%$ | Sub-strike-tick positions |
+| Delta Spot | ~\$50-\$500 | Low | $50\%$-$60\%$ | Liquid spot, frequent rebalance |
+| Vanilla Bull Spread | ~\$100 residual | Medium | $70\%$-$80\%$ | Standard listed strikes available |
+| Multi-Greek Portfolio | ~\$1,000-\$2,000 | High | $85\%$-$92\%$ | Large books, vol-sensitive period |
 
 Hedging cost is the residual after the binary premium is netted against the cost of the hedging instrument; complexity reflects the number of positions to monitor and rebalance; variance reduction is the median across the running parameters in the notebook simulation. Adverse-selection P&L from informed flow is excluded.
 
@@ -301,6 +301,3 @@ The analysis demonstrates that successful binary options market making requires 
 - Financial Conduct Authority (2019). *Policy Statement PS19/11: Product intervention measures for retail binary options*. London: FCA.
 - U.S. Commodity Futures Trading Commission. Designated Contract Markets (DCMs). [cftc.gov/IndustryOversight/TradingOrganizations/DCMs](https://www.cftc.gov/IndustryOversight/TradingOrganizations/DCMs).
 
-## License
-
-MIT.
