@@ -2,7 +2,7 @@
 
 Three families of hedging strategies for short-dated binary options, with Monte-Carlo P&L simulations, optimal-$\varepsilon$ analysis for bull-spread replication, multi-Greek (delta-gamma-vega) portfolio matching, pin-risk stress, and a market-maker daily-P&L sensitivity model. Built directly on top of the closed-form pricing functions developed in the companion repository.
 
-This is the second half of a two-part series. The pricing repository [`binary-options-pricing`](https://github.com/rolandgem/binary-options-pricing) develops the Black-Scholes binary call price, the Greeks (delta, gamma, vega), and a fuzzy-spot extension. **Read it first.** The hedging code below assumes you understand the pricing formulas, the worked example (S = K = \$50,000, $\sigma = 80\%$, $r = 5\%$, $T = 1/365$), and the Greeks at the strike (binary delta = $1.90 \times 10^{-4}$, binary gamma = $-2.20 \times 10^{-9}$, binary vega = $-1.21 \times 10^{-2}$).
+This is the second half of a two-part series. The pricing repository [`binary-options-pricing`](https://github.com/rolandgem/binary-options-pricing) develops the Black-Scholes binary call price, the Greeks (delta, gamma, vega), and a fuzzy-spot extension. **Read it first.** The hedging code below assumes you understand the pricing formulas, the worked example ($S = K$ = \$50,000, $\sigma = 80\%$, $r = 5\%$, $T = 1/365$), and the Greeks at the strike (binary delta = $1.90 \times 10^{-4}$, binary gamma = $-2.20 \times 10^{-9}$, binary vega = $-1.21 \times 10^{-2}$).
 
 ## Companion Notebook
 
@@ -82,6 +82,10 @@ The simplest P&L benchmark is the static delta hedge: 1.905 BTC bought at $t = 0
 
 The hedge is approximately right only for moves close to the initial spot; large moves leave large residuals because the static hedge size is sized to $t = 0$ delta, not the path-integrated delta.
 
+![Static delta hedge P&L vs terminal spot](img/static-delta-hedge-pnl.png)
+
+The static hedge shifts the unhedged step into a sloped pair of lines that cross zero only near the initial spot. Tail moves on either side leave large residuals.
+
 The companion notebook simulates the path-dependent P&L distribution under realistic rebalancing policies (time-based at $N \in \{5, 50, 500\}$; band-based at $\Delta\delta = 0.10$ thresholds) over 5,000 Monte-Carlo paths. The headline result: discrete delta hedging on a 24-hour ATM binary reduces P&L variance by roughly 50-60% relative to no hedge but never drives it to zero. The residual is dominated by terminal paths landing within $\pm \sigma\sqrt{T}$ of the strike, where the discontinuous payoff cannot be approximated by any continuous-payoff hedge.
 
 Key observations:
@@ -90,6 +94,14 @@ Key observations:
 - Transaction costs of \$10-\$50 per rebalance accumulate to \$50-\$500 over a 24-hour horizon depending on rebalancing intensity, which is small relative to the residual variance from pin risk
 - The best case for delta hedging is large gradual moves; the worst case is terminal pinning near the strike
 - Delta-band rebalancing dominates time-based rebalancing at matched rebalance counts, because it concentrates rebalances near the strike where they are most valuable
+
+![Distribution of terminal P&L under different rebalance counts](img/delta-hedge-mc-distribution.png)
+
+The unhedged P&L distribution is bimodal at the two binary outcomes. Adding rebalanced delta hedging collapses the modes toward zero with diminishing returns past 50 rebalances; further rebalancing is mostly fee drag.
+
+![Time-based vs delta-band-based rebalancing P&L distributions](img/time-vs-band-rebalancing.png)
+
+Band rebalancing produces a tighter P&L distribution with fewer rebalances, because it concentrates effort near the strike where delta moves matter most.
 
 ### 4.2 Vanilla Option Replication
 
@@ -127,6 +139,10 @@ To hedge 10,000 binary options (each with \$1 maximum payout):
 - Cost with 2% bid-ask paid on each leg: ≈ \$5,030
 - Net position after receiving binary premium of \$4,929: approximately \$100 hedging cost (notably tighter than delta hedging because the bull spread captures gamma)
 
+![Bull spread approximation of binary payoff at expiry](img/bull-spread-payoff.png)
+
+The bull spread payoff at expiry is exact outside $[K-\varepsilon, K+\varepsilon]$ and linearly interpolates inside. The shaded transition region is the irreducible approximation error.
+
 #### 4.2.4 Payoff Analysis
 
 | Spot Range | Binary P&L | Spread P&L | Net P&L | Risk |
@@ -137,6 +153,10 @@ To hedge 10,000 binary options (each with \$1 maximum payout):
 | Above \$50,500 | -\$5,071 | +\$5,069 | ≈ \$0 | Perfectly hedged |
 
 The hedge is exact outside $[K-\varepsilon, K+\varepsilon]$ and worst inside. The companion notebook plots P&L variance as a function of $\varepsilon$ across [\$100, \$2,000], recovering a U-shape: small $\varepsilon$ has tight inside-region exposure but pays heavy bid-ask, large $\varepsilon$ has cheap execution but wider transition region. The minimum-cost $\varepsilon$ for the running parameters sits near \$500.
+
+![Bull spread total cost as a function of epsilon, U-shaped curve](img/bull-spread-eps-sweep.png)
+
+The bid-ask cost decreases as $\varepsilon$ widens (fewer spreads needed); the residual P&L standard deviation increases (wider transition region). The sum is U-shaped, with a minimum that depends on $\sigma$, $T$, and the bid-ask paid on each vanilla leg.
 
 ### 4.3 Dynamic Portfolio Hedging
 
@@ -153,7 +173,7 @@ where:
 
 #### 4.3.2 Target Greeks
 
-For 10,000 binary calls at S = K = \$50,000, $\sigma = 80\%$, $T = 1/365$:
+For 10,000 binary calls at $S = K$ = \$50,000, $\sigma = 80\%$, $T = 1/365$:
 
 - Delta target: $-1.905$ (short binary, must offset by long delta)
 - Gamma target: $+2.20 \times 10^{-5}$ (binary gamma is negative at strike, position gamma flips sign for the short)
@@ -264,6 +284,10 @@ A useful benchmark is the bull-case daily P&L; the model below should not be rea
 
 **Annual return on capital** (365 trading days, since crypto markets are continuous): \$630 × 365 / \$5,000,000 = 4.6% (bull case)
 
+![Annualised ROC sensitivity heatmap to spread capture and adverse selection](img/daily-pnl-heatmap.png)
+
+The annualised ROC depends most strongly on the product of spread capture and (one minus adverse selection). The bull-case sits in the green corner; realistic operating points sit closer to the centre.
+
 These numbers are deliberately bear-leaning. An earlier draft of this analysis computed a 153% annual ROC by combining a 4.7% spread capture, a 48% assumed win rate against informed flow, and a 250-day calendar; each of those inputs is too generous in isolation, and the product compounds the optimism. A more credible top-of-cycle band, with 2%-3% spread capture, slightly informed flow priced in, and the full 365-day crypto calendar, lands in the 5%-25% ROC range. The companion notebook plots a heatmap of annualised ROC across (spread capture, adverse selection drag) so readers can see the sensitivity directly.
 
 **Adverse selection.** The dominant unmodelled risk is adverse selection from informed flow at the strike: a 24-hour ATM binary attracts traders with a directional view on the next funding tick or an information edge on impending macro releases. On real desks, the marginal counterparty is more informed than the marginal market-maker quote, and the market-maker's effective spread capture on filled trades is typically 30%-50% of the quoted spread, not 50%. The model above already discounts this to approximately 21%.
@@ -280,6 +304,10 @@ These numbers are deliberately bear-leaning. An earlier draft of this analysis c
 | Multi-Greek Portfolio | ~\$1,000-\$2,000 | High | $85\%$-$92\%$ | Large books, vol-sensitive period |
 
 Hedging cost is the residual after the binary premium is netted against the cost of the hedging instrument; complexity reflects the number of positions to monitor and rebalance; variance reduction is the median across the running parameters in the notebook simulation. Adverse-selection P&L from informed flow is excluded.
+
+![Pin-risk stress: terminal P&L for each strategy in K plus or minus 2 percent](img/pin-risk-stress.png)
+
+The cliff at the strike is visible for the unhedged binary and remains visible (smaller, but present) for every continuous-payoff hedge. The bull spread converts the cliff into a triangular dent inside $[K-\varepsilon, K+\varepsilon]$; the multi-Greek portfolio narrows the dent further but does not eliminate it.
 
 ### Key Points
 
