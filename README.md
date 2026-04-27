@@ -327,5 +327,4 @@ The analysis demonstrates that successful binary options market making requires 
 - Carr, P., and Wu, L. (2014). Static hedging of standard options. *Journal of Financial Econometrics*, 12(1), 3-46. The bull-spread approximation in Section 4.2 is a one-period special case of their general static-hedge construction.
 - European Securities and Markets Authority (2018). Decision (EU) 2018/795 of 22 May 2018 to temporarily prohibit the marketing, distribution or sale of binary options to retail clients in the Union.
 - Financial Conduct Authority (2019). *Policy Statement PS19/11: Product intervention measures for retail binary options*. London: FCA.
-- U.S. Commodity Futures Trading Commission. Designated Contract Markets (DCMs). [cftc.gov/IndustryOversight/TradingOrganizations/DCMs](https://www.cftc.gov/IndustryOversight/TradingOrganizations/DCMs).
 
